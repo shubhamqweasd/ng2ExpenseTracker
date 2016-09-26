@@ -10,4 +10,10 @@ export class AuthService{
 	register = function(user){
 		return this._http.post('/auth/signup/local',user)
 	}
+	profile = function(){
+		return this._http.get('/auth/profile')
+	}
+	logout = function(){
+		return this._http.get('/auth/logout')
+	}
 }

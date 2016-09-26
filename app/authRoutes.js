@@ -17,6 +17,11 @@ module.exports = function(passport){
 						var newUser = new User();
 			    		newUser.email = req.body.email
 			    		newUser.name = req.body.name
+                        if(req.body.role){
+                            newUser.role = req.body.role
+                        } else {
+                            newUser.role = 'user'
+                        }
 			    		newUser.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null)
 			    		newUser.save(function(err){
 			    			if(err) res.json({"success":false,"message":"SOmthing went wrong try again"})
@@ -55,7 +60,7 @@ function authHandlerLocal(req,res){
 	    if (!user) return res.json({success:false,message:info.message});
 	    req.logIn(user, function(err) {
 	      if (err) return res.json({"success":false,"message":"Somthing went wrong try again"})
-	      return res.json({"success":true})
+	      return res.json({"success":true,role:req.user.role})
 	    });
 	 }
 }

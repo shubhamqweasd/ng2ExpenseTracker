@@ -24,7 +24,12 @@ export class LoginComponent{
 		this._Auth.login(user).subscribe((data)=>{
 			data = JSON.parse(data._body)
 			if(data.success){
-				window.location.href = '/auth/profile'
+				if(data.role == 'user'){
+					window.location.href = '/user/profile'
+				}
+				if(data.role == 'admin'){
+					window.location.href = 'dash/admin'
+				}
 			} else {
 				alert('ERROR TRY AGAIN')
 			}

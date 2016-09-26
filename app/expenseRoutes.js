@@ -45,6 +45,7 @@ module.exports = function(){
 
 	router.put('/edit/:id',function(req,res){
 		delete req.body.created_by
+		delete req.body.created_on
 		var toValidate = ['amount','comment','description']
 		if(validateRequest(toValidate,req)){
 			Expense.update({_id:req.params.id},req.body,function(err,num){
