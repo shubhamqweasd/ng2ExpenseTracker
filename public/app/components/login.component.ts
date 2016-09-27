@@ -28,10 +28,13 @@ export class LoginComponent{
 			data = JSON.parse(data._body)
 			if(data.success){
 				if(data.role == 'user'){
-					this._Router.navigate(['user/profile'])
+					this._Router.navigate(['dash/user'])
 				}
 				if(data.role == 'admin'){
 					this._Router.navigate(['dash/admin'])
+				}
+				if(data.role == 'manager'){
+					this._Router.navigate(['dash/manager'])
 				}
 			} else {
 				this.err = data.message

@@ -8,7 +8,14 @@ module.exports = function(){
 
 	router.get('/users',function(req,res){
 		User.find({},function(err,data){
-			if(!err) res.json({success:true,data:data})
+			if(!err){
+				if(req.user.role == 'manager'){
+					data = data.filter(function(x){
+						return x.role == 'user'
+					})
+				}
+				res.json({success:true,data:data})
+			}
 				else res.json({success:false,message:err})
 		})
 	})
@@ -41,7 +48,7 @@ module.exports = function(){
 function isLoggedIn(req, res, next) {
 
     //if user is authenticated in the session, carry on
-    if (req.isAuthenticated() && req.user.role == 'admin')
+    if (req.isAuthenticated() && (req.user.role == 'admin' || req.user.role == 'manager'))
         return next();
 
     res.json({success:false,message:"NOT AUTHORISED"});

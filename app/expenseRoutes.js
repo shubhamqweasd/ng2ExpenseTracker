@@ -24,22 +24,24 @@ module.exports = function(){
 	})
 
 	router.get('/created',function(req,res){
-		Expense.find({created_by:req.user.email},function(err,data){
+		var searchQuery = {}
+		if(req.user.role == 'user'){
+			searchQuery.created_by = req.user.email
+		}
+		
+		Expense.find(searchQuery,function(err,data){
 			if(!err) res.json({success:true,data:data})
 				else res.json({success:false,message:err})
 		})
+		
 	})
 
 	router.delete('/delete/:id',function(req,res){
 		Expense.findOne({_id:req.params.id},function(err,data){
-			if(req.user.email == data.created_by){
-				Expense.remove({_id:req.params.id},function(err){
-					if(!err) res.json({success:true})
-						else res.json({success:false,message:err})
-				})
-			} else {
-				res.json({success:false,message:"NOT AUTHORISED"})
-			}
+			Expense.remove({_id:req.params.id},function(err){
+				if(!err) res.json({success:true})
+					else res.json({success:false,message:err})
+			})
 		})
 	})
 

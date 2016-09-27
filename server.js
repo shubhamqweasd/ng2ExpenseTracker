@@ -34,7 +34,7 @@ require('./config/passport')(passport)
 // ============ Routes =========== //
 app.use('/auth',require('./app/authRoutes')(passport))
 app.use('/expense',require('./app/expenseRoutes')())
-app.use('/admin',require('./app/adminRoutes')())
+app.use('/user',require('./app/userRoutes')())
 
 app.use(function(req,res){
 	res.sendFile('index.html',{root:'./public/'})
