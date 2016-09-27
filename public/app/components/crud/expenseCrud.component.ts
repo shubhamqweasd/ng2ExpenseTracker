@@ -9,24 +9,28 @@ import {AuthService} from '../../services/auth.service.ts'
 			<button (click) = "toggle('showAddExp')" class="btn btn-primary">ADD EXPENSE</button>
 			<br>
 			<div *ngIf="showAddExp">
-				<h4>ADD EXPENSE</h4>
-				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.description" required/></p>
-				<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "exp.amount" required/></p>
-				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.comment" required/></p>
-				<p>
-					<input class="btn btn-primary" type="submit" (click) = "addExpenese()" value="Submit"/>
-					<input class="btn btn-danger" type="reset" (click) = "toggle('showAddExp')" value="Cancel"/>
-				</p>
+				<form (submit) = "addExpenese()">
+					<h4>ADD EXPENSE</h4>
+					<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.description" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "exp.amount" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.comment" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>
+						<input class="btn btn-primary" type="submit" value="Submit"/>
+						<input class="btn btn-danger" type="reset" (click) = "toggle('showAddExp')" value="Cancel"/>
+					</p>
+				</form>
 			</div>
 			<div *ngIf="showEditExp">
-				<h4>EDIT EXPENSE</h4>
-				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.description" required/></p>
-				<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "selectExp.amount" required/></p>
-				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.comment" required/></p>
-				<p>
-					<input class="btn btn-primary" type="submit" (click) = "editExpenese(selectExp._id,selectExp)" value="Submit"/>
-					<input class="btn btn-danger" type="reset" (click) = "toggle('showEditExp')" value="Cancel"/>
-				</p>
+				<form (submit) = "editExpenese(selectExp._id,selectExp)">
+					<h4>EDIT EXPENSE</h4>
+					<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.description" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "selectExp.amount" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.comment" [ngModelOptions]="{standalone: true}" required/></p>
+					<p>
+						<input class="btn btn-primary" type="submit" value="Submit"/>
+						<input class="btn btn-danger" type="reset" (click) = "toggle('showEditExp')" value="Cancel"/>
+					</p>
+				</form>
 			</div>
 		</div>
 		<br>
@@ -44,7 +48,7 @@ import {AuthService} from '../../services/auth.service.ts'
 					<td><input class="form-control" type="date" [(ngModel)] = "date" /></td>
 					<td><button (click) = "date = ''" class="btn btn-danger">CLEAR</button></td>
 				</tr>
-				<tr *ngFor="let curr of (expenses | dateFilter:date)">
+				<tr *ngFor="let curr of (expenses | dateFilter:date) | paginate: { itemsPerPage: 5, currentPage: p }">
 					<td>{{curr.created_on | date}}</td>
 					<td>{{curr.description}}</td>
 					<td>{{curr.amount}}</td>
@@ -53,6 +57,7 @@ import {AuthService} from '../../services/auth.service.ts'
 					<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
 				</tr>
 			</table>
+			<pagination-controls (pageChange)="p = $event"></pagination-controls>
 		</div>
 	`,
 	providers:[ExpenseService]

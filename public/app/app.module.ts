@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { FormsModule }   from '@angular/forms'
 import { HttpModule, JsonpModule } from '@angular/http'
 import { RouterModule } from '@angular/router'
+import {Ng2PaginationModule} from 'ng2-pagination'
 
 // componenrs
 import { AppComponent } from './app.component.ts'
@@ -27,7 +28,7 @@ const routes = [
 
 @NgModule({
 	declarations : [AppComponent,LoginComponent,RegisterComponent,ProfileComponent,AdminComponent,ManagerComponent,UserCrudComponent,ExpenseCrudComponent,ExpensesPipe],
-	imports:[BrowserModule,FormsModule,HttpModule,JsonpModule,RouterModule.forRoot(routes)],
+	imports:[BrowserModule,FormsModule,HttpModule,JsonpModule,RouterModule.forRoot(routes),Ng2PaginationModule],
 	bootstrap:[AppComponent]
 
 })

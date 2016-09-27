@@ -5,13 +5,13 @@ import { Router } from '@angular/router'
 @Component({
 	selector:'LOGIN',
 	template:`
-	<form class="form-signin">
+	<form class="form-signin" (submit) = "submit(user)">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="text" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" [(ngModel)] = "user.email" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" [(ngModel)] = "user.password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" (click) = "submit(user)">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         <p>{{err}}</p>
      </form>
 	`

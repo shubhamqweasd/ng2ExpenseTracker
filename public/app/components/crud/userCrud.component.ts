@@ -10,32 +10,36 @@ import {UserService} from '../../services/user.service.ts'
 		<button (click) = "toggle('showAddUser')" class="btn btn-primary">ADD USER</button>
 		<br>
 		<div *ngIf="showAddUser">
-			<h4>ADD USER</h4>
-			<p>NAME: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.name" required/></p>
-			<p>EMAIL: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.email" required/></p>
-			<p>PASSWORD: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.password" required/></p>
-			<p>ROLE: <select class="form-control" [(ngModel)] = "usr.role" required>
-						<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
-					</select>
-			</p>
-			<p>
-				<input class="btn btn-primary" type="submit" (click) = "addUser()" value="Submit"/>
-				<input class="btn btn-danger" type="reset" (click) = "toggle('showAddUser')" value="Cancel"/>
-			</p>
+			<form (submit) = "addUser()">
+				<h4>ADD USER</h4>
+				<p>NAME: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.name" required/></p>
+				<p>EMAIL: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.email" required/></p>
+				<p>PASSWORD: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.password" required/></p>
+				<p>ROLE: <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.role" required>
+							<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+						</select>
+				</p>
+				<p>
+					<input class="btn btn-primary" type="submit" value="Submit"/>
+					<input class="btn btn-danger" type="reset" (click) = "toggle('showAddUser')" value="Cancel"/>
+				</p>
+			</form>
 		</div>
 		<div *ngIf="showEditUser">
-			<h4>EDIT USER</h4>
-			<p>NAME: <input class="form-control" type="text" size="25" [(ngModel)] = "selectedUser.name" required/></p>
-			<p>EMAIL: <input class="form-control" type="text" size="25" [(ngModel)] = "selectedUser.email" required/></p>
-			<p>PASSWORD: <input class="form-control" type="text" size="25" placeholder="leave empty to keep same password" [(ngModel)] = "selectedUser.password" required/></p>
-			<p>ROLE: <select class="form-control" [(ngModel)] = "selectedUser.role" required>
-						<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
-					</select>
-			</p>
-			<p>
-				<input class="btn btn-primary" type="submit" (click) = "editUser(selectedUser._id,selectedUser)" value="Submit"/>
-				<input class="btn btn-danger" type="reset" (click) = "toggle('showEditUser')" value="Cancel"/>
-			</p>
+			<form (submit) = "editUser(selectedUser._id,selectedUser)">
+				<h4>EDIT USER</h4>
+				<p>NAME: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.name" required/></p>
+				<p>EMAIL: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.email" required/></p>
+				<p>PASSWORD: <input class="form-control" type="text" size="25" placeholder="leave empty to keep same password" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.password"/></p>
+				<p>ROLE: <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.role" required>
+							<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+						</select>
+				</p>
+				<p>
+					<input class="btn btn-primary" type="submit" value="Submit"/>
+					<input class="btn btn-danger" type="reset" (click) = "toggle('showEditUser')" value="Cancel"/>
+				</p>
+			</form>
 		</div>
 	</div>
 	<br>
@@ -48,7 +52,7 @@ import {UserService} from '../../services/user.service.ts'
 				<th>EDIT</th>
 				<th>DELETE</th>
 			</tr>
-			<tr *ngFor="let curr of users">
+			<tr *ngFor="let curr of users | paginate: { itemsPerPage: 5, currentPage: p }">
 				<td>{{curr.email}}</td>
 				<td>{{curr.name}}</td>
 				<td>{{curr.role}}</td>
@@ -56,6 +60,7 @@ import {UserService} from '../../services/user.service.ts'
 				<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
 			</tr>
 		</table>
+		<pagination-controls (pageChange)="p = $event"></pagination-controls>
 	</div>
 	`,
 	providers:[ExpenseService,UserService]
@@ -92,7 +97,7 @@ export class UserCrudComponent{
 	addUser = function(){
 		this._User.addUser(this.usr).subscribe((data)=>{
 			this.toggle('showAddUser')
-			this.exp = {}
+			this.usr = {}
 			this.getAllUsers()
 		})
 	}
