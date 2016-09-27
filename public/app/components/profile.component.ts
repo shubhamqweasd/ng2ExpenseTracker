@@ -49,7 +49,7 @@ import {AuthService} from '../services/auth.service.ts'
 			</tr>
 		</table>
 	`,
-	providers:[ExpenseService,AuthService]
+	providers:[ExpenseService]
 })
 
 export class ProfileComponent{
@@ -64,6 +64,7 @@ export class ProfileComponent{
 		this._Auth.profile().subscribe((data)=>{
 			data = JSON.parse(data._body)
 			if(data.success && data.data.role == 'user'){
+				this._Auth.changeLoggedStatus({message:'LOGGEDIN',user:data.data})
 				this.user = data.data
 				this.getAllExpenses()
 			} else {

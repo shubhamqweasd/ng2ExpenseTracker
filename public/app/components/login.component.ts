@@ -1,42 +1,41 @@
-import {Component} from '@angular/core'
-import {AuthService} from '../services/auth.service.ts'
+import { Component } from '@angular/core'
+import { AuthService } from '../services/auth.service.ts'
+import { Router } from '@angular/router'
 
 @Component({
 	selector:'LOGIN',
 	template:`
-	<h1>	LOGIN </h1><li><a routerLink="/register">Register</a></li>
-	<p>Username: <input type="text" size="25" [(ngModel)] = "user.email" required/></p>
-	<p>Password: <input type="password" size="25" [(ngModel)] = "user.password" required/></p>
-	<p>
-		<input type="submit" (click) = "submit(user)" value="Submit"/>
-		<input type="reset" (click) = "clear()" value="Reset"/>
-	</p>
-	`,
-	providers:[AuthService]
+	<form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" [(ngModel)] = "user.email" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" [(ngModel)] = "user.password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" (click) = "submit(user)">Sign in</button>
+        <p>{{err}}</p>
+     </form>
+	`
 })
 
 export class LoginComponent{
 	public user = {}
+	public err = ''
 
-	constructor(private _Auth:AuthService){}
+	constructor(private _Auth:AuthService, private _Router:Router){}
 
 	submit = function(user){
-		this._Auth.login(user).subscribe((data)=>{
+		this._Auth.login(user).subscribe((data)=>{			
 			data = JSON.parse(data._body)
 			if(data.success){
 				if(data.role == 'user'){
-					window.location.href = '/user/profile'
+					this._Router.navigate(['user/profile'])
 				}
 				if(data.role == 'admin'){
-					window.location.href = 'dash/admin'
+					this._Router.navigate(['dash/admin'])
 				}
 			} else {
-				alert('ERROR TRY AGAIN')
+				this.err = data.message
 			}
 		})
-	}
-
-	clear = function(){
-		this.user = {}
 	}
 }
