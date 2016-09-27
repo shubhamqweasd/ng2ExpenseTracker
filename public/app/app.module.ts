@@ -13,6 +13,7 @@ import { AdminComponent } from './components/admin.component.ts'
 import { ManagerComponent } from './components/manager.component.ts'
 import { UserCrudComponent } from './components/crud/userCrud.component.ts'
 import { ExpenseCrudComponent } from './components/crud/expenseCrud.component.ts'
+import { ExpensesPipe } from './pipes/expenses.pipe.ts'
 
 const routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,7 +26,7 @@ const routes = [
 ]
 
 @NgModule({
-	declarations : [AppComponent,LoginComponent,RegisterComponent,ProfileComponent,AdminComponent,ManagerComponent,UserCrudComponent,ExpenseCrudComponent],
+	declarations : [AppComponent,LoginComponent,RegisterComponent,ProfileComponent,AdminComponent,ManagerComponent,UserCrudComponent,ExpenseCrudComponent,ExpensesPipe],
 	imports:[BrowserModule,FormsModule,HttpModule,JsonpModule,RouterModule.forRoot(routes)],
 	bootstrap:[AppComponent]
 

@@ -11,7 +11,7 @@ import {AuthService} from '../../services/auth.service.ts'
 			<div *ngIf="showAddExp">
 				<h4>ADD EXPENSE</h4>
 				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.description" required/></p>
-				<p>AMOUNT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.amount" required/></p>
+				<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "exp.amount" required/></p>
 				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.comment" required/></p>
 				<p>
 					<input class="btn btn-primary" type="submit" (click) = "addExpenese()" value="Submit"/>
@@ -21,7 +21,7 @@ import {AuthService} from '../../services/auth.service.ts'
 			<div *ngIf="showEditExp">
 				<h4>EDIT EXPENSE</h4>
 				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.description" required/></p>
-				<p>AMOUNT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.amount" required/></p>
+				<p>AMOUNT: <input class="form-control" type="number" size="25" [(ngModel)] = "selectExp.amount" required/></p>
 				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.comment" required/></p>
 				<p>
 					<input class="btn btn-primary" type="submit" (click) = "editExpenese(selectExp._id,selectExp)" value="Submit"/>
@@ -40,7 +40,11 @@ import {AuthService} from '../../services/auth.service.ts'
 					<th>EDIT</th>
 					<th>DELETE</th>
 				</tr>
-				<tr *ngFor="let curr of expenses">
+				<tr>
+					<td><input class="form-control" type="date" [(ngModel)] = "date" /></td>
+					<td><button (click) = "date = ''" class="btn btn-danger">CLEAR</button></td>
+				</tr>
+				<tr *ngFor="let curr of (expenses | dateFilter:date)">
 					<td>{{curr.created_on | date}}</td>
 					<td>{{curr.description}}</td>
 					<td>{{curr.amount}}</td>
@@ -113,9 +117,4 @@ export class ExpenseCrudComponent{
 		this[which] = !this[which]
 	}
 
-	logout = function(){
-		this._Auth.logout().subscribe((res)=>{
-			window.location.href = '/login'
-		})
-	}
 }
