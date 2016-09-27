@@ -114,9 +114,9 @@ export class UserCrudComponent{
 		})
 	}
 
-	toggleEditUsr = function(currExp){
-		delete currExp.password
-		this.selectedUser = currExp
+	toggleEditUsr = function(currUsr){
+		delete currUsr.password
+		this.selectedUser = JSON.parse(JSON.stringify(currUsr))
 		this.showEditUser = true
 	}
 

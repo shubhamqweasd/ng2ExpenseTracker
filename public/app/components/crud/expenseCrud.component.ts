@@ -109,7 +109,7 @@ export class ExpenseCrudComponent{
 	}
 
 	toggleEditExp = function(currExp){
-		this.selectExp = currExp
+		this.selectExp = JSON.parse(JSON.stringify(currExp))
 		this.showEditExp = true
 	}
 
