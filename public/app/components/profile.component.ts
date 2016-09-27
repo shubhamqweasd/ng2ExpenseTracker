@@ -5,49 +5,51 @@ import {AuthService} from '../services/auth.service.ts'
 @Component({
 	selector:'PROFILE',
 	template:`
-		<h2>USER PROFILE AND DASHBOARD <button (click) = "logout()">LOGOUT</button> </h2>
-		<h3>Hi {{user.name}} - ( {{ user.email }} )</h3>
-		<button (click) = "toggle('showAddExp')">ADD EXPENSE</button>
-		<br>
-		<div *ngIf="showAddExp">
-			<h4>ADD EXPENSE</h4>
-			<p>DESCRIPTION: <input type="text" size="25" [(ngModel)] = "exp.description" required/></p>
-			<p>AMOUNT: <input type="text" size="25" [(ngModel)] = "exp.amount" required/></p>
-			<p>COMMENT: <input type="text" size="25" [(ngModel)] = "exp.comment" required/></p>
-			<p>
-				<input type="submit" (click) = "addExpenese()" value="Submit"/>
-				<input type="reset" (click) = "toggle('showAddExp')" value="Cancel"/>
-			</p>
+		<div class="col-sm-6">
+			<button (click) = "toggle('showAddExp')" class="btn btn-primary">ADD EXPENSE</button>
+			<br>
+			<div *ngIf="showAddExp">
+				<h4>ADD EXPENSE</h4>
+				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.description" required/></p>
+				<p>AMOUNT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.amount" required/></p>
+				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "exp.comment" required/></p>
+				<p>
+					<input class="btn btn-primary" type="submit" (click) = "addExpenese()" value="Submit"/>
+					<input class="btn btn-danger" type="reset" (click) = "toggle('showAddExp')" value="Cancel"/>
+				</p>
+			</div>
+			<div *ngIf="showEditExp">
+				<h4>EDIT EXPENSE</h4>
+				<p>DESCRIPTION: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.description" required/></p>
+				<p>AMOUNT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.amount" required/></p>
+				<p>COMMENT: <input class="form-control" type="text" size="25" [(ngModel)] = "selectExp.comment" required/></p>
+				<p>
+					<input class="btn btn-primary" type="submit" (click) = "editExpenese(selectExp._id,selectExp)" value="Submit"/>
+					<input class="btn btn-danger" type="reset" (click) = "toggle('showEditExp')" value="Cancel"/>
+				</p>
+			</div>
 		</div>
-		<div *ngIf="showEditExp">
-			<h4>EDIT EXPENSE</h4>
-			<p>DESCRIPTION: <input type="text" size="25" [(ngModel)] = "selectExp.description" required/></p>
-			<p>AMOUNT: <input type="text" size="25" [(ngModel)] = "selectExp.amount" required/></p>
-			<p>COMMENT: <input type="password" size="25" [(ngModel)] = "selectExp.comment" required/></p>
-			<p>
-				<input type="submit" (click) = "editExpenese(selectExp._id,selectExp)" value="Submit"/>
-				<input type="reset" (click) = "toggle('showEditExp')" value="Cancel"/>
-			</p>
-		</div>
 		<br>
-		<table border='1'>
-			<tr>
-				<th>CREATED ON </th>
-				<th>DESCRIPTION </th>
-				<th>AMOUNT </th>
-				<th>COMMENT </th>
-				<th>EDIT</th>
-				<th>DELETE</th>
-			</tr>
-			<tr *ngFor="let curr of expenses">
-				<td>{{curr.created_on}}</td>
-				<td>{{curr.description}}</td>
-				<td>{{curr.amount}}</td>
-				<td>{{curr.comment}}</td>
-				<td><button (click) = toggleEditExp(curr)>EDIT</button></td>
-				<td><button (click) = delete(curr._id)>DELEte</button></td>
-			</tr>
-		</table>
+		<div class="col-sm-8 col-sm-offset-2">
+			<table class="table table-striped">
+				<tr>
+					<th>CREATED ON </th>
+					<th>DESCRIPTION </th>
+					<th>AMOUNT </th>
+					<th>COMMENT </th>
+					<th>EDIT</th>
+					<th>DELETE</th>
+				</tr>
+				<tr *ngFor="let curr of expenses">
+					<td>{{curr.created_on | date}}</td>
+					<td>{{curr.description}}</td>
+					<td>{{curr.amount}}</td>
+					<td>{{curr.comment}}</td>
+					<td><button (click) = toggleEditExp(curr) class="btn btn-default">EDIT</button></td>
+					<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
+				</tr>
+			</table>
+		</div>
 	`,
 	providers:[ExpenseService]
 })

@@ -6,44 +6,45 @@ import {AdminService} from '../services/admin.service.ts'
 @Component({
 	selector:'ADMIN',
 	template:`
-		<h2>ADMIN PROFILE AND DASHBOARD <button (click) = "logout()">LOGOUT</button> </h2>
-
-		<button (click) = "toggle('showAddUser')">ADD USER</button>
+	<div class="col-sm-6">
+		<button (click) = "toggle('showAddUser')" class="btn btn-primary">ADD USER</button>
 		<br>
 		<div *ngIf="showAddUser">
 			<h4>ADD USER</h4>
-			<p>NAME: <input type="text" size="25" [(ngModel)] = "usr.name" required/></p>
-			<p>EMAIL: <input type="text" size="25" [(ngModel)] = "usr.email" required/></p>
-			<p>PASSWORD: <input type="text" size="25" [(ngModel)] = "usr.password" required/></p>
-			<p>ROLE: <select [(ngModel)] = "usr.role" required>
+			<p>NAME: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.name" required/></p>
+			<p>EMAIL: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.email" required/></p>
+			<p>PASSWORD: <input class="form-control" type="text" size="25" [(ngModel)] = "usr.password" required/></p>
+			<p>ROLE: <select class="form-control" [(ngModel)] = "usr.role" required>
 						<option value="user">USER</option>
 						<option value="manager">MANAGER</option>
 						<option value="admin">ADMIN</option>
 					</select>
 			</p>
 			<p>
-				<input type="submit" (click) = "addUser()" value="Submit"/>
-				<input type="reset" (click) = "toggle('showAddUser')" value="Cancel"/>
+				<input class="btn btn-primary" type="submit" (click) = "addUser()" value="Submit"/>
+				<input class="btn btn-danger" type="reset" (click) = "toggle('showAddUser')" value="Cancel"/>
 			</p>
 		</div>
 		<div *ngIf="showEditUser">
 			<h4>EDIT USER</h4>
-			<p>NAME: <input type="text" size="25" [(ngModel)] = "selectedUser.name" required/></p>
-			<p>EMAIL: <input type="text" size="25" [(ngModel)] = "selectedUser.email" required/></p>
-			<p>PASSWORD: <input type="text" size="25" placeholder="leave empty to keep same password" [(ngModel)] = "selectedUser.password" required/></p>
-			<p>ROLE: <select [(ngModel)] = "selectedUser.role" required>
+			<p>NAME: <input class="form-control" type="text" size="25" [(ngModel)] = "selectedUser.name" required/></p>
+			<p>EMAIL: <input class="form-control" type="text" size="25" [(ngModel)] = "selectedUser.email" required/></p>
+			<p>PASSWORD: <input class="form-control" type="text" size="25" placeholder="leave empty to keep same password" [(ngModel)] = "selectedUser.password" required/></p>
+			<p>ROLE: <select class="form-control" [(ngModel)] = "selectedUser.role" required>
 						<option value="user">USER</option>
 						<option value="manager">MANAGER</option>
 						<option value="admin">ADMIN</option>
 					</select>
 			</p>
 			<p>
-				<input type="submit" (click) = "editUser(selectedUser._id,selectedUser)" value="Submit"/>
-				<input type="reset" (click) = "toggle('showEditUser')" value="Cancel"/>
+				<input class="btn btn-primary" type="submit" (click) = "editUser(selectedUser._id,selectedUser)" value="Submit"/>
+				<input class="btn btn-danger" type="reset" (click) = "toggle('showEditUser')" value="Cancel"/>
 			</p>
 		</div>
-		<br>
-		<table border='1'>
+	</div>
+	<br>
+	<div class="col-sm-8 col-sm-offset-2">
+		<table class="table table-striped">
 			<tr>
 				<th>EMAIL </th>
 				<th>NAME </th>
@@ -55,12 +56,13 @@ import {AdminService} from '../services/admin.service.ts'
 				<td>{{curr.email}}</td>
 				<td>{{curr.name}}</td>
 				<td>{{curr.role}}</td>
-				<td><button (click) = toggleEditUsr(curr)>EDIT</button></td>
-				<td><button (click) = delete(curr._id)>DELEte</button></td>
+				<td><button (click) = toggleEditUsr(curr) class="btn btn-default">EDIT</button></td>
+				<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
 			</tr>
 		</table>
+	</div>
 	`,
-	providers:[ExpenseService,AuthService,AdminService]
+	providers:[ExpenseService,AdminService]
 })
 
 export class AdminComponent{
@@ -74,6 +76,7 @@ export class AdminComponent{
 		this._Auth.profile().subscribe((data)=>{
 			data = JSON.parse(data._body)
 			if(data.success && data.data.role == 'admin'){
+				this._Auth.changeLoggedStatus({message:'LOGGEDIN',user:data.data})
 				this.getAllUsers()
 			} else {
 				window.location.href = '/login'
