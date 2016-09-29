@@ -45,11 +45,12 @@ import {AuthService} from '../../services/auth.service.ts'
 					<th>DELETE</th>
 				</tr>
 				<tr>
-					<td><input class="form-control" type="date" [(ngModel)] = "date" /></td>
-					<td><button (click) = "date = ''" class="btn btn-danger">CLEAR</button></td>
+					<td><input class="form-control" type="date" [(ngModel)] = "startDate" /></td>
+					<td><input class="form-control" type="date" [(ngModel)] = "endDate" /></td>
+					<td><button (click) = "startDate = '';endDate=''" class="btn btn-danger">CLEAR</button></td>
 				</tr>
-				<tr *ngFor="let curr of (expenses | dateFilter:date) | paginate: { itemsPerPage: 5, currentPage: p }">
-					<td>{{curr.created_on | date}}</td>
+				<tr *ngFor="let curr of (expenses | dateFilter:startDate:endDate) | paginate: { itemsPerPage: 5, currentPage: p }">
+					<td>{{curr.created_on | date:'yMMMdjms'}}</td>
 					<td>{{curr.description}}</td>
 					<td>{{curr.amount}}</td>
 					<td>{{curr.comment}}</td>

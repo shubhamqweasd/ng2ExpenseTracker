@@ -2,11 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'dateFilter'})
 export class ExpensesPipe implements PipeTransform {
-  transform(value, args) {
+  transform(value, startDate, endDate) {
     if (!value || value.length == 0) return value
-    if(args == '' || args == undefined || args == null || Date.parse(args) == NaN) return value
+    if(startDate == '' || startDate == undefined || startDate == null || Date.parse(startDate) == NaN) return value
+    if(endDate == '' || endDate == undefined || endDate == null || Date.parse(endDate) == NaN) return value
     return value.filter(x=>{
-    	return this.getDateString(Date.parse(x.created_on)) == this.getDateString(Date.parse(args))
+    	return this.getDateString(Date.parse(x.created_on)) >= this.getDateString(Date.parse(startDate)) && this.getDateString(Date.parse(x.created_on)) <= this.getDateString(Date.parse(endDate))
     })
   }
 
