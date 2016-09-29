@@ -16,4 +16,49 @@ export class ExpenseService{
 	deleteExpense = function(id){
 		return this._http.delete('/expense/delete/'+id)
 	}
+	printWeekly = function(expenses){
+		expenses = expenses
+		.reduce((arr,x) => {
+			for(var k in arr){
+				if(arr[k].date == this.getDateString(Date.parse(x.created_on))){
+					arr[k].data.push(x)
+					return arr
+				}
+			}
+			arr.push({
+				date:this.getDateString(Date.parse(x.created_on)),
+				timestamp: Date.parse(x.created_on),
+				data:[x]
+			})
+
+			return arr
+		},[])
+		.map((x) => {
+			var total = 0
+			for(var k in x.data){
+				total += x.data[k].amount
+			}
+			x.data = total
+			return x
+		})
+
+		var total = expenses.reduce((sum,x) => {
+			return sum + x.data
+		},0)
+
+		return {
+			total : total,
+			average : total/expenses.length,
+			expenses : expenses
+		}
+		
+	}
+
+	getDateString(date){
+	  	if(date != NaN){
+	  		date = new Date(date)
+	  		return date.getYear().toString()+date.getMonth().toString()+date.getDate().toString()
+	  	}
+	  	return false
+  	}
 }

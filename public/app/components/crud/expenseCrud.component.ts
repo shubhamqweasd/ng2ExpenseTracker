@@ -34,7 +34,7 @@ import {AuthService} from '../../services/auth.service.ts'
 			</div>
 		</div>
 		<br>
-		<div class="col-sm-8 col-sm-offset-2">
+		<div class="col-sm-8 col-sm-offset-2" *ngIf="!weeklyShow">
 			<table class="table table-striped">
 				<tr>
 					<th>CREATED ON </th>
@@ -60,6 +60,33 @@ import {AuthService} from '../../services/auth.service.ts'
 			</table>
 			<pagination-controls (pageChange)="p = $event"></pagination-controls>
 		</div>
+		<button *ngIf="user.role == 'user' && !weeklyShow" class="btn btn-danger" style="margin-top:13px;" (click) = "printWeekly()">Print report</button>
+
+		<div class="col-sm-8 col-sm-offset-2" *ngIf="weeklyShow">
+			<table class="table table-striped">
+				<tr>
+					<th>CREATED ON </th>
+					<th>Total Expense </th>
+				</tr>
+				<tr *ngFor="let current of reportDetails.expenses">
+					<td>{{current.timestamp | date}}</td>
+					<td>{{current.data}}</td>
+				</tr>
+			</table>
+			<div class="col-sm-6">
+				<table class="table table-striped">
+					<tr>
+						<th>Total Expense </th>
+						<th>Average Expense </th>
+					</tr>
+					<tr>
+						<td>{{reportDetails.total}}</td>
+						<td>{{reportDetails.average}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<button *ngIf="user.role == 'user' && weeklyShow" class="btn btn-danger" style="margin-top:13px;" (click) = "weeklyShow = false">Back to Expenses</button>
 	`,
 	providers:[ExpenseService]
 })
@@ -71,6 +98,8 @@ export class ExpenseCrudComponent{
 	public selectExp = {}
 	public showAddExp = false
 	public showEditExp = false
+	public reportDetails = {}
+	public weeklyShow = false
 
 	constructor(private _Expense:ExpenseService, private _Auth:AuthService){
 		this._Auth.profile().subscribe((data)=>{
@@ -121,6 +150,11 @@ export class ExpenseCrudComponent{
 
 	toggle = function(which){
 		this[which] = !this[which]
+	}
+
+	printWeekly = function(){
+		this.reportDetails = this._Expense.printWeekly(this.expenses)
+		this.weeklyShow = true
 	}
 
 }
