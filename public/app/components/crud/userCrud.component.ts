@@ -13,7 +13,7 @@ import {UserService} from '../../services/user.service.ts'
 			<form (submit) = "addUser()">
 				<h4>ADD USER</h4>
 				<p>NAME: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.name" required/></p>
-				<p>EMAIL: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.email" required/></p>
+				<p>EMAIL: <input class="form-control" type="email" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.email" required/></p>
 				<p>PASSWORD: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.password" required/></p>
 				<p>ROLE: <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)] = "usr.role" required>
 							<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
@@ -29,7 +29,7 @@ import {UserService} from '../../services/user.service.ts'
 			<form (submit) = "editUser(selectedUser._id,selectedUser)">
 				<h4>EDIT USER</h4>
 				<p>NAME: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.name" required/></p>
-				<p>EMAIL: <input class="form-control" type="text" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.email" required/></p>
+				<p>EMAIL: <input class="form-control" type="email" size="25" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.email" required/></p>
 				<p>PASSWORD: <input class="form-control" type="text" size="25" placeholder="leave empty to keep same password" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.password"/></p>
 				<p>ROLE: <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)] = "selectedUser.role" required>
 							<option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
@@ -57,7 +57,7 @@ import {UserService} from '../../services/user.service.ts'
 				<td>{{curr.name}}</td>
 				<td>{{curr.role}}</td>
 				<td><button (click) = toggleEditUsr(curr) class="btn btn-default">EDIT</button></td>
-				<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
+				<td><button (click) = delete(curr._id) class="btn btn-default">DELETE</button></td>
 			</tr>
 		</table>
 		<pagination-controls (pageChange)="p = $event"></pagination-controls>

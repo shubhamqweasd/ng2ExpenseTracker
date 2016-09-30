@@ -10,7 +10,7 @@ import { Router } from '@angular/router'
         <label for="inputName" class="sr-only">Email address</label>
         <input type="text" id="inputName" name="inputName" class="form-control" placeholder="Username" [(ngModel)] = "user.name" required autofocus>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="text" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" [(ngModel)] = "user.email" required>
+        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" [(ngModel)] = "user.email" required>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" [(ngModel)] = "user.password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>

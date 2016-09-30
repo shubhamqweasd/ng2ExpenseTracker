@@ -55,7 +55,7 @@ import {AuthService} from '../../services/auth.service.ts'
 					<td>{{curr.amount}}</td>
 					<td>{{curr.comment}}</td>
 					<td><button (click) = toggleEditExp(curr) class="btn btn-default">EDIT</button></td>
-					<td><button (click) = delete(curr._id) class="btn btn-default">DELEte</button></td>
+					<td><button (click) = delete(curr._id) class="btn btn-default">DELETE</button></td>
 				</tr>
 			</table>
 			<pagination-controls (pageChange)="p = $event"></pagination-controls>

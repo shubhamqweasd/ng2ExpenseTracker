@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'dateFilter'})
 export class ExpensesPipe implements PipeTransform {
   transform(value, startDate, endDate) {
+    console.log(startDate)
     if (!value || value.length == 0) return value
     if(startDate == '' || startDate == undefined || startDate == null || Date.parse(startDate) == NaN) return value
     if(endDate == '' || endDate == undefined || endDate == null || Date.parse(endDate) == NaN) return value
