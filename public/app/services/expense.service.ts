@@ -8,12 +8,16 @@ export class ExpenseService{
 		return this._http.get('/expense/created')
 	}
 	addExpense = function(data){
+		if(!data || data == null || data == undefined || data == '') return false
 		return this._http.post('/expense/add',data)
 	}
 	editExpense = function(id,data){
+		if(!id || id == null || id == undefined || id == '') return false
+		if(!data || data == null || data == undefined || data == '') return false
 		return this._http.put('/expense/edit/'+id,data)
 	}
 	deleteExpense = function(id){
+		if(!id || id == null || id == undefined || id == '') return false
 		return this._http.delete('/expense/delete/'+id)
 	}
 	printWeekly = function(expenses){

@@ -17,10 +17,12 @@ export class AuthService{
 	}
 
 	login = function(user){
+		if(!user || user == null || user == undefined || user == '') return false
 		return this._http.post('/auth/login/local',user)
 	}
 
 	register = function(user){
+		if(!user || user == null || user == undefined || user == '') return false
 		return this._http.post('/auth/signup/local',user)
 	}
 

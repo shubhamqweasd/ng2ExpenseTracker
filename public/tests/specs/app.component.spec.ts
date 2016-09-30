@@ -38,10 +38,4 @@ describe('AppComponent', () => {
   	expect(comp.user).toEqual({})
   })
 
-  // it('should have a property isLogged true after login',()=>{
-  // 	authService.changeLoggedStatus({message:"LOGGEDIN",data:{}})
-  // 	fixture.detectChanges();
-  // 	expect(comp.isLogged).toBe(true)
-  // })
-
 });
