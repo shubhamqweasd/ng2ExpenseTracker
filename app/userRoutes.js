@@ -14,16 +14,21 @@ module.exports = function(){
 						return x.role == 'user'
 					})
 				}
-				res.json({success:true,data:data})
+				if(req.user.role == 'admin'){
+					data = data.filter(function(x){
+						return x.email != req.user.email
+					})
+				}
+				res.status(200).json({success:true,data:data})
 			}
-				else res.json({success:false,message:err})
+				else res.status(500).json({success:false,message:err})
 		})
 	})
 
 	router.delete('/delete/:id',function(req,res){
 		User.remove({_id:req.params.id},function(err){
-			if(!err) res.json({success:true})
-				else res.json({success:false,message:err})
+			if(!err) res.status(200).json({success:true})
+				else res.status(500).json({success:false,message:err})
 		})
 	})
 
@@ -33,12 +38,14 @@ module.exports = function(){
 			if(req.body.password){
 				req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null)
 			}
-
+			if(req.user.role == 'manager'){
+				delete req.body.role
+			}
 			User.update({_id:req.params.id},req.body,function(err,num){
-				if(!err) res.json({success:true,num:num})
-					else res.json({success:false,message:err})
+				if(!err) res.status(200).json({success:true,num:num})
+					else res.status(500).json({success:false,message:err})
 			})
-		} else res.json({success:false,message:'INVALID REQ PARAMETERS'})
+		} else res.status(401).json({success:false,message:'INVALID REQ PARAMETERS'})
 	})
 
 	
@@ -51,7 +58,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated() && (req.user.role == 'admin' || req.user.role == 'manager'))
         return next();
 
-    res.json({success:false,message:"NOT AUTHORISED"});
+    res.status(403).json({success:false,message:"NOT AUTHORISED"});
 }
 
 function validateRequest(arr,req){

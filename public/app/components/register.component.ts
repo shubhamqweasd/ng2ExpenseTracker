@@ -30,9 +30,10 @@ export class RegisterComponent{
 			data = JSON.parse(data._body)
 			if(data.success){
 				this._Router.navigate(['login'])
-			} else {
-				this.err = data.message
 			}
+		},(err)=>{
+			var data = JSON.parse(err._body)
+			this.err = data.message
 		})
 	}
 }

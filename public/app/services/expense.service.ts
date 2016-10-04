@@ -4,8 +4,8 @@ import { Http,Response } from '@angular/http'
 @Injectable()
 export class ExpenseService{
 	constructor(private _http:Http){}
-	getExpenses = function(){
-		return this._http.get('/expense/created')
+	getExpenses = function(startDate,endDate){
+		return this._http.get('/expense/created/'+startDate+"/"+endDate)
 	}
 	addExpense = function(data){
 		if(!data || data == null || data == undefined || data == '') return false

@@ -54,7 +54,7 @@ describe('User Service', () => {
 	}))
 
 	it('should return getExpenses observable', inject([ExpenseService], (expenseService: ExpenseService) => {
-		expect(expenseService.getExpenses().hasOwnProperty('_subscribe')).toBe(true);
+		expect(expenseService.getExpenses(false,false).hasOwnProperty('_subscribe')).toBe(true);
 	}))
 
 	it('should return addExpense observable', inject([ExpenseService], (expenseService: ExpenseService) => {

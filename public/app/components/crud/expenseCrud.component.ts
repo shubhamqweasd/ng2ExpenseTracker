@@ -45,11 +45,11 @@ import {AuthService} from '../../services/auth.service.ts'
 					<th>DELETE</th>
 				</tr>
 				<tr>
-					<td><input class="form-control" type="date" [(ngModel)] = "startDate" /></td>
-					<td><input class="form-control" type="date" [(ngModel)] = "endDate" /></td>
-					<td><button (click) = "startDate = '';endDate=''" class="btn btn-danger">CLEAR</button></td>
+					<td><input class="form-control" type="date" [(ngModel)] = "startDate" (ngModelChange)="dateChange()"/></td>
+					<td><input class="form-control" type="date" [(ngModel)] = "endDate" (ngModelChange)="dateChange()"/></td>
+					<td><button (click) = "startDate = '';endDate='';dateChange()" class="btn btn-danger">CLEAR</button></td>
 				</tr>
-				<tr *ngFor="let curr of (expenses | dateFilter:startDate:endDate) | paginate: { itemsPerPage: 5, currentPage: p }">
+				<tr *ngFor="let curr of expenses | paginate: { itemsPerPage: 5, currentPage: p }">
 					<td>{{curr.created_on | date:'yMMMdjms'}}</td>
 					<td>{{curr.description}}</td>
 					<td>{{curr.amount}}</td>
@@ -100,6 +100,8 @@ export class ExpenseCrudComponent{
 	public showEditExp = false
 	public reportDetails = {}
 	public weeklyShow = false
+	public startDate = ''
+	public endDate = ''
 
 	constructor(private _Expense:ExpenseService, private _Auth:AuthService){
 		this._Auth.profile().subscribe((data)=>{
@@ -107,15 +109,17 @@ export class ExpenseCrudComponent{
 			if(data.success && ( data.data.role == 'user' || data.data.role == 'admin') ){
 				this._Auth.changeLoggedStatus({message:'LOGGEDIN',user:data.data})
 				this.user = data.data
-				this.getAllExpenses()
+				this.getAllExpenses(false,false)
 			} else {
 				window.location.href = '/login'
 			}
+		},(err)=>{
+			window.location.href = '/login'
 		})
 	}
 
-	getAllExpenses = function(){
-		this._Expense.getExpenses().subscribe((data)=>{
+	getAllExpenses = function(start,end){
+		this._Expense.getExpenses(start,end).subscribe((data)=>{
 			data = JSON.parse(data._body)
 			this.expenses = data.data
 		})
@@ -125,13 +129,13 @@ export class ExpenseCrudComponent{
 		this._Expense.addExpense(this.exp).subscribe((data)=>{
 			this.toggle('showAddExp')
 			this.exp = {}
-			this.getAllExpenses()
+			this.getAllExpenses(false,false)
 		})
 	}
 
 	delete = function(id){
 		this._Expense.deleteExpense(id).subscribe((data)=>{
-			this.getAllExpenses()
+			this.getAllExpenses(false,false)
 		})
 	}
 
@@ -139,8 +143,24 @@ export class ExpenseCrudComponent{
 		this._Expense.editExpense(id,data).subscribe((data)=>{
 			this.toggle('showEditExp')
 			this.selectExp = {}
-			this.getAllExpenses()
+			this.getAllExpenses(false,false)
 		})
+	}
+
+	dateChange = function(){
+		var date1
+		var date2
+		if(this.startDate == '' || this.startDate == undefined || this.startDate == null || Date.parse(this.startDate) == NaN){
+			date1 = false
+		} else {
+			date1 = this.startDate
+		}
+    	if(this.endDate == '' || this.endDate == undefined || this.endDate == null || Date.parse(this.endDate) == NaN){
+    		date2 = false
+    	} else {
+			date2 = this.endDate
+		}
+		this.getAllExpenses(date1,date2)
 	}
 
 	toggleEditExp = function(currExp){

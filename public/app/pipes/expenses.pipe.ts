@@ -14,7 +14,7 @@ export class ExpensesPipe implements PipeTransform {
   getDateString(date){
   	if(date != NaN){
   		date = new Date(date)
-  		return date.getYear().toString()+date.getMonth().toString()+date.getDate().toString()
+  		return date.getTime()
   	}
   	return false
   }

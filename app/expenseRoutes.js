@@ -17,21 +17,27 @@ module.exports = function(){
 			newTask.description = 	req.body.description
 			newTask.created_on = 	new Date()
 			newTask.save(function(err){
-				if(!err) res.json({success:true})
-					else res.json({success:false,message:err})
+				if(!err) res.status(200).json({success:true})
+					else res.status(500).json({success:false,message:err})
 			})
-		} else res.json({success:false,message:'INVALID REQ PARAMETERS'})
+		} else res.status(400).json({success:false,message:'INVALID REQ PARAMETERS'})
 	})
 
-	router.get('/created',function(req,res){
+	router.get('/created/:startDate/:endDate',function(req,res){
 		var searchQuery = {}
 		if(req.user.role == 'user'){
 			searchQuery.created_by = req.user.email
 		}
-		
 		Expense.find(searchQuery,function(err,data){
-			if(!err) res.json({success:true,data:data})
-				else res.json({success:false,message:err})
+			if(!err){
+				if(req.params.startDate != 'false' && req.params.endDate != 'false'){
+					console.log('-----------------------')
+					data = data.filter(function(x){
+				    	return getDateString(Date.parse(x.created_on)) >= getDateString(Date.parse(req.params.startDate)) && getDateString(Date.parse(x.created_on)) <= getDateString(Date.parse(req.params.endDate))
+				    })
+				}
+				res.status(200).json({success:true,data:data})
+			} else res.status(500).json({success:false,message:err})
 		})
 		
 	})
@@ -39,8 +45,8 @@ module.exports = function(){
 	router.delete('/delete/:id',function(req,res){
 		Expense.findOne({_id:req.params.id},function(err,data){
 			Expense.remove({_id:req.params.id},function(err){
-				if(!err) res.json({success:true})
-					else res.json({success:false,message:err})
+				if(!err) res.status(200).json({success:true})
+					else res.status(500).json({success:false,message:err})
 			})
 		})
 	})
@@ -51,10 +57,10 @@ module.exports = function(){
 		var toValidate = ['amount','comment','description']
 		if(validateRequest(toValidate,req)){
 			Expense.update({_id:req.params.id},req.body,function(err,num){
-				if(!err) res.json({success:true,num:num})
-					else res.json({success:false,message:err})
+				if(!err) res.status(200).json({success:true,num:num})
+					else res.status(500).json({success:false,message:err})
 			})
-		} else res.json({success:false,message:'INVALID REQ PARAMETERS'})
+		} else res.status(400).json({success:false,message:'INVALID REQ PARAMETERS'})
 	})
 
 	return router
@@ -66,7 +72,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
 
-    res.json({success:false,message:"NOT AUTHORISED"});
+    res.status(403).json({success:false,message:"NOT AUTHORISED"});
 }
 
 function validateRequest(arr,req){
@@ -76,4 +82,12 @@ function validateRequest(arr,req){
 		}
 	}
 	return true
+}
+
+function getDateString(date){
+  	if(date != NaN){
+  		date = new Date(date)
+  		return date.getTime()
+  	}
+  	return false
 }

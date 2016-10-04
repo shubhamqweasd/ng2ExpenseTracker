@@ -84,6 +84,8 @@ export class UserCrudComponent{
 			} else {
 				window.location.href = '/login'
 			}
+		},(err)=>{
+			window.location.href = '/login'
 		})
 	}
 

@@ -36,9 +36,10 @@ export class LoginComponent{
 				if(data.role == 'manager'){
 					this._Router.navigate(['dash/manager'])
 				}
-			} else {
-				this.err = data.message
 			}
+		},(err)=>{
+			var data = JSON.parse(err._body)
+			this.err = data.message
 		})
 	}
 }
